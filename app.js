@@ -1,0 +1,30 @@
+var express = require('express'),
+	superagent = require('superagent'),
+	cheerio = require('cheerio');
+
+var app = express();
+
+app.get('/', function (req, res, next) {
+	superagent.get('https://cnodejs.org').end(function (err, sres) {
+		var $, items = [];
+		if (err) {
+			return next(err);
+		}
+		$ = cheerio.load(sres.text);
+		$('#topic_list .cell').each(function (idx, elem) {
+			var $elem = $(elem);
+			var $title = $elem.find('.topic_title');
+			items.push({
+				title: $title.attr('title'),
+				href: $title.attr('href'),
+				author: $elem.find('.user_avatar img').attr('title')
+			});
+		});
+		
+		res.send(items);
+	});
+});
+
+app.listen(3000, function (req, res) {
+	console.log('app is running at port 3000.');
+});
