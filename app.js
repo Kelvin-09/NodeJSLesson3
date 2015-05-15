@@ -3,6 +3,7 @@ var express = require('express'),
 	cheerio = require('cheerio');
 
 var app = express();
+	targetPort = process.env.PORT || 3000;
 
 app.get('/', function (req, res, next) {
 	superagent.get('https://cnodejs.org').end(function (err, sres) {
@@ -21,10 +22,15 @@ app.get('/', function (req, res, next) {
 			});
 		});
 		
+		res
+			.status(200)
+			.set({
+			  'Content-Type': 'application/json'
+			});
 		res.send(items);
 	});
 });
 
-app.listen(3000, function (req, res) {
-	console.log('app is running at port 3000.');
+app.listen(targetPort, function (req, res) {
+	console.log('app is running at port ' + targetPort + '.');
 });
