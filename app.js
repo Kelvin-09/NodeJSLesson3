@@ -26,8 +26,8 @@ app.get('/', function (req, res, next) {
 			.status(200)
 			.set({
 			  'Content-Type': 'application/json'
-			});
-		res.send(items);
+			})
+			.send(items);
 	});
 });
 
